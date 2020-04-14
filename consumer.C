@@ -13,10 +13,10 @@ void * consumer(void * VoidPtr) {
     sem_wait(DataPtr->MutexPtr);	/* entry */
 
     /* critical region */
-    *(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) + 1;
+    *(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) - 1;
     // printf("After %s --> %5d\n", DataPtr->Name, *(DataPtr->ValuePtr));
     // fflush(stdout);
-        cout << "incremented valuePtr in consumer -> " << *(DataPtr->ValuePtr) << endl;
+        cout << "decremented valuePtr in consumer -> " << *(DataPtr->ValuePtr) << endl;
 
     sem_post(DataPtr->MutexPtr);	/* exit */
   }
