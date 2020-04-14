@@ -13,10 +13,13 @@ void * producer(void * VoidPtr) {
     sem_wait(DataPtr->MutexPtr);	/* entry */
 
     /* critical region */
-    *(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) + 1;
+    if(DataPtr->QueuePtr->size() < 10){
+      DataPtr->QueuePtr->push(SUCKER);
+      cout << "Belt: " << "Added " << Candies[0] << endl;
+    }
+    //*(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) + 1;
     // printf("After %s --> %5d\n", DataPtr->Name, *(DataPtr->ValuePtr));
     // fflush(stdout);
-    cout << "incremented valuePtr in producer -> " << *(DataPtr->ValuePtr) << endl;
     sem_post(DataPtr->MutexPtr);	/* exit */
   }
 }

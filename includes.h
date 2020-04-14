@@ -11,6 +11,7 @@
 #include <semaphore.h> 
 #include <unistd.h> 
 #include <queue>
+#include <string.h>
 
 using namespace std;
 
@@ -19,11 +20,13 @@ enum Candy {
   FROGBITE
 };
 
+static const char * Candies[] = { "escargo sucker", "frog bite" };
+
 struct THREAD_DATA {
-  char *Name;       /* Human readable name of operation */
+  char *Name;       
   sem_t *MutexPtr;	/* pointer to critical region semaphore */
   int *ValuePtr;	  /* pointer to shared data */
-  queue<Candy> *candyQueue = new queue<Candy>;
+  queue<Candy> *QueuePtr;
   int *candyCount;
   int *frogBiteCount;
 

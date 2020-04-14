@@ -70,35 +70,49 @@ void * producer(void * VoidPtr);
 void * consumer(void * VoidPtr);
 
 int main(int argc, char **argv) { 
-  cout << "Debug: 1" << endl;
-  THREAD_DATA belt;
   pthread_t producerThread;
   pthread_t consumerThread;
-  cout << "Debug: 2" << endl;
   sem_t Mutex;
   int Value = 0;
   void *ThreadResultPtr;
+  queue <Candy> q;
 
+
+  THREAD_DATA belt;
   belt.MutexPtr = &Mutex;
   belt.ValuePtr = &Value;
-  cout << "Debug: 3" << endl;
+  belt.QueuePtr = &q;
+
+  THREAD_DATA lucy;
+  //char *lucyName = "lucy";
+  lucy.MutexPtr = &Mutex;
+  lucy.ValuePtr = &Value;
+  lucy.QueuePtr = &q;
+  lucy.Name = strdup("Lucy");
+
+  THREAD_DATA ethel;
+  ethel.MutexPtr = &Mutex;
+  ethel.ValuePtr = &Value;
+  ethel.QueuePtr = &q;
+  ethel.Name = strdup("Ethel");
+
   //create sem
   if (sem_init(&Mutex, 0, 1) == -1) {
     fprintf(stderr, "Unable to initialize Mutex semaphore\n");
     exit(EXT_SEMAPHORE); //exit codes
   }
-  cout << "Debug: 4" << endl;
+
   //start threads here
-  if (pthread_create(&consumerThread, NULL, consumer, &belt)) {
-    fprintf(stderr, "Unable to create consumer thread\n");
-    exit(EXT_THREAD); //exit codes
-  }
   if (pthread_create(&producerThread, NULL, producer, &belt)) {
     fprintf(stderr, "Unable to create producer thread\n");
     exit(EXT_THREAD); //exit codes
   }
+  if (pthread_create(&consumerThread, NULL, consumer, &lucy)) {
+    fprintf(stderr, "Unable to create consumer thread\n");
+    exit(EXT_THREAD); //exit codes
+  }
   
-  cout << "Debug: 5" << endl;
+
 
   if (pthread_join(producerThread, &ThreadResultPtr)) {
     fprintf(stderr, "Thread join error\n");
