@@ -66,29 +66,33 @@ void * producer(void * VoidPtr);
 void * consumer(void * VoidPtr);
 
 int main(int argc, char **argv) { 
-  pthread_t producerThread;
-  pthread_t consumerThread;
+  pthread_t producerThreadS;
+  pthread_t producerThreadF;
+  pthread_t consumerThreadL;
+  pthread_t consumerThreadE;
   sem_t Mutex;
-  int Value = 0;
   void *ThreadResultPtr;
   queue <Candy> q;
+  Candy s = SUCKER;
+  Candy f = FROGBITE;
 
+  THREAD_DATA sucker;
+  sucker.MutexPtr = &Mutex;
+  sucker.QueuePtr = &q;
+  sucker.producerType = &s;
 
-  THREAD_DATA belt;
-  belt.MutexPtr = &Mutex;
-  belt.ValuePtr = &Value;
-  belt.QueuePtr = &q;
+  THREAD_DATA frog;
+  frog.MutexPtr = &Mutex;
+  frog.QueuePtr = &q;
+  frog.producerType = &f;
 
   THREAD_DATA lucy;
-  //char *lucyName = "lucy";
   lucy.MutexPtr = &Mutex;
-  lucy.ValuePtr = &Value;
   lucy.QueuePtr = &q;
   lucy.Name = strdup("Lucy");
 
   THREAD_DATA ethel;
   ethel.MutexPtr = &Mutex;
-  ethel.ValuePtr = &Value;
   ethel.QueuePtr = &q;
   ethel.Name = strdup("Ethel");
 
@@ -99,26 +103,41 @@ int main(int argc, char **argv) {
   }
 
   //start threads here
-  if (pthread_create(&producerThread, NULL, producer, &belt)) {
+  if (pthread_create(&producerThreadS, NULL, producer, &sucker)) {
     fprintf(stderr, "Unable to create producer thread\n");
     exit(EXT_THREAD); //exit codes
   }
-  if (pthread_create(&consumerThread, NULL, consumer, &lucy)) {
+  if (pthread_create(&producerThreadF, NULL, producer, &frog)) {
+    fprintf(stderr, "Unable to create producer thread\n");
+    exit(EXT_THREAD); //exit codes
+  }
+  if (pthread_create(&consumerThreadL, NULL, consumer, &lucy)) {
+    fprintf(stderr, "Unable to create consumer thread\n");
+    exit(EXT_THREAD); //exit codes
+  }
+  if (pthread_create(&consumerThreadE, NULL, consumer, &ethel)) {
     fprintf(stderr, "Unable to create consumer thread\n");
     exit(EXT_THREAD); //exit codes
   }
   
 
 
-  if (pthread_join(producerThread, &ThreadResultPtr)) {
+  if (pthread_join(producerThreadS, &ThreadResultPtr)) {
     fprintf(stderr, "Thread join error\n");
     exit(EXT_THREAD); //exit codes
   }
-  if (pthread_join(consumerThread, &ThreadResultPtr)) {
+  if (pthread_join(producerThreadF, &ThreadResultPtr)) {
     fprintf(stderr, "Thread join error\n");
     exit(EXT_THREAD); //exit codes
   }
-  cout << "Debug: 6" << endl;
+  if (pthread_join(consumerThreadL, &ThreadResultPtr)) {
+    fprintf(stderr, "Thread join error\n");
+    exit(EXT_THREAD); //exit codes
+  }
+  if (pthread_join(consumerThreadE, &ThreadResultPtr)) {
+    fprintf(stderr, "Thread join error\n");
+    exit(EXT_THREAD); //exit codes
+  }
 
   return 0;
 }
