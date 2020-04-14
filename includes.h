@@ -11,6 +11,8 @@
 #include <semaphore.h> 
 #include <unistd.h> 
 #include <queue>
+#include <thread>
+#include <chrono>
 #include <string.h>
 
 using namespace std;

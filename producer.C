@@ -3,7 +3,6 @@
 // RedID: (Kemper)822 86 7065 | (Clode)820 72 7161
 #include "includes.h"
 
-
 using namespace std;
 
 void * producer(void * VoidPtr) {
@@ -14,6 +13,7 @@ void * producer(void * VoidPtr) {
 
     /* critical region */
     if(DataPtr->QueuePtr->size() < 10){
+      this_thread::sleep_for(chrono::milliseconds(*(DataPtr->waitTime)));
       DataPtr->QueuePtr->push(*(DataPtr->producerType));
       cout << "Belt: " << "Added " << Candies[*(DataPtr->producerType)] << endl;
     }

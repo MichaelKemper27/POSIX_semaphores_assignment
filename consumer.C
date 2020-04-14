@@ -3,7 +3,6 @@
 // RedID: (Kemper)822 86 7065 | (Clode)820 72 7161
 #include "includes.h"
 
-
 using namespace std;
 
 void * consumer(void * VoidPtr) {
@@ -14,9 +13,9 @@ void * consumer(void * VoidPtr) {
 
     /* critical region */
     if(DataPtr->QueuePtr->size() > 0){
+      this_thread::sleep_for(chrono::milliseconds(*(DataPtr->waitTime)));
       Candy c = DataPtr->QueuePtr->front();
       DataPtr->QueuePtr->pop();
-      
       cout << "Belt: " << DataPtr->Name <<  " consumed " << Candies[c] << endl;
       
     }

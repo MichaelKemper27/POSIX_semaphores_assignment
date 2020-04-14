@@ -12,17 +12,12 @@ struct WAIT_TIMES {
   int lucyWait;
   int frogBiteWait;
   int suckerWait;
-}
+};
 
 WAIT_TIMES parseArguments(int argc, char **argv) {
   int option;
-  WAIT_TIMES waitTimes;
-  waitTimes.ethelWait = 0;
-  waitTimes.lucyWait = 0;
-  waitTimes.frogBiteWait = 0;
-  waitTimes.suckerWait = 0;
-  entryCountSizes = new int[argc];
-  while ( (option = getopt(argc, argv, "n:p:t")) != -1) {
+  struct WAIT_TIMES waitTimes = {0, 0, 0, 0};
+  while ( (option = getopt(argc, argv, ":e:L:f:E:")) != -1) {
     switch (option) {
       case 'E': /* Ethel candy boxing time */
       waitTimes.ethelWait = atoi(optarg);
@@ -45,6 +40,7 @@ WAIT_TIMES parseArguments(int argc, char **argv) {
       break;
     }
   }
+
   return waitTimes;
 }
 
@@ -63,25 +59,31 @@ int main(int argc, char **argv) {
   Candy f = FROGBITE;
 
   WAIT_TIMES waitTimes = parseArguments(argc, argv);
+
   THREAD_DATA sucker;
   sucker.MutexPtr = &Mutex;
   sucker.QueuePtr = &q;
   sucker.producerType = &s;
+  cout << "sucker wait time :" << waitTimes.suckerWait << endl;
+  sucker.waitTime = &(waitTimes.suckerWait);
 
   THREAD_DATA frog;
   frog.MutexPtr = &Mutex;
   frog.QueuePtr = &q;
   frog.producerType = &f;
+  frog.waitTime = &(waitTimes.frogBiteWait);
 
   THREAD_DATA lucy;
   lucy.MutexPtr = &Mutex;
   lucy.QueuePtr = &q;
   lucy.Name = strdup("Lucy");
+  lucy.waitTime = &(waitTimes.lucyWait);
 
   THREAD_DATA ethel;
   ethel.MutexPtr = &Mutex;
   ethel.QueuePtr = &q;
   ethel.Name = strdup("Ethel");
+  ethel.waitTime = &(waitTimes.ethelWait);
 
   //create sem
   if (sem_init(&Mutex, 0, 1) == -1) {
