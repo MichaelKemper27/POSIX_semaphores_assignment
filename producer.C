@@ -13,13 +13,16 @@ void * producer(void * VoidPtr) {
 
     /* critical region */
     if(DataPtr->QueuePtr->size() < 10){
-      this_thread::sleep_for(chrono::milliseconds(*(DataPtr->waitTime)));
+      
       DataPtr->QueuePtr->push(*(DataPtr->producerType));
       cout << "Belt: " << "Added " << Candies[*(DataPtr->producerType)] << endl;
+      fflush(stdout);
     }
     //*(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) + 1;
     // printf("After %s --> %5d\n", DataPtr->Name, *(DataPtr->ValuePtr));
     // fflush(stdout);
     sem_post(DataPtr->MutexPtr);	/* exit */
+    this_thread::sleep_for(chrono::milliseconds(*(DataPtr->waitTime)));
   }
+  return NULL;
 }
