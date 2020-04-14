@@ -13,10 +13,16 @@ void * consumer(void * VoidPtr) {
     sem_wait(DataPtr->MutexPtr);	/* entry */
 
     /* critical region */
-    *(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) - 1;
+    if(DataPtr->QueuePtr->size() > 0){
+      Candy c = DataPtr->QueuePtr->front();
+      DataPtr->QueuePtr->pop();
+      
+      cout << "Belt: " << DataPtr->Name <<  " consumed " << Candies[c] << endl;
+      
+    }
+    //*(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) - 1;
     // printf("After %s --> %5d\n", DataPtr->Name, *(DataPtr->ValuePtr));
     // fflush(stdout);
-        cout << "decremented valuePtr in consumer -> " << *(DataPtr->ValuePtr) << endl;
 
     sem_post(DataPtr->MutexPtr);	/* exit */
   }
