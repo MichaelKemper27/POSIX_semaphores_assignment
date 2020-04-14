@@ -1,13 +1,9 @@
 // mizzo.C
 // Student: Kemper, Michael | Clode, Ryan
 // RedID: (Kemper)822 86 7065 | (Clode)820 72 7161
-#include <iostream>
-#include <fstream>
-#include <stdio.h> 
-#include <pthread.h> 
-#include <semaphore.h> 
-#include <unistd.h> 
-#include "producer.C"
+#define EXT_SEMAPHORE 10
+#define EXT_THREAD 15
+#include "includes.h"
 
 using namespace std;
 
@@ -61,233 +57,45 @@ using namespace std;
 //   }
 // }
 
-
-// /*
-//  * If you are using this program on a big-endian machine (something
-//  * other than an Intel PC or equivalent) the unsigned longs will need
-//  * to be converted from little-endian to big-endian.
-//  */
-// uint32_t swap_endian(uint32_t num)
-// {
-//   return(((num << 24) & 0xff000000) | ((num << 8) & 0x00ff0000) | 
-//   ((num >> 8) & 0x0000ff00) | ((num >> 24) & 0x000000ff) );
-// }
-
-// /* determine if system is big- or little- endian */
-// ENDIAN endian()
-// {
-//   /* Allocate a 32 bit character array and pointer which will be used
-//    * to manipulate it.
-//    */
-//   uint32_t *a;
-//   unsigned char p[4];
-  
-//   a = (uint32_t *) p;  /* Let a point to the character array */
-//   *a = 0x12345678; /* Store a known bit pattern to the array */
-//   /* Check the first byte.  If it contains the high order bits,
-//    * it is big-endian, otherwise little-endian.
-//    */
-//   if(*p == 0x12)
-//     return BIG;
-//   else
-//     return LITTLE;
-// }
-
-// /* int NextAddress(FILE *trace_file, p2AddrTr *Addr)
-//  * Fetch the next address from the trace.
-//  *
-//  * trace_file must be a file handle to an trace file opened
-//  * with fopen. User provides a pointer to an address structure.
-//  *
-//  * Populates the Addr structure and returns non-zero if successful.
-//  */
-// int NextAddress(FILE *trace_file, p2AddrTr *addr_ptr) {
-
-//   int readN;	/* number of records stored */ 
-//   static ENDIAN byte_order = UNKNOWN;	/* don't know machine format */
-
-//   if (byte_order == UNKNOWN) {
-//     /* First invocation.  Determine if this is a litte- or
-//      * big- endian machine so that we can convert bit patterns
-//      * if needed that are stored in little-endian format
-//      */
-//     byte_order = endian();
-//   }
-
-//   /* Read the next address record. */
-//   readN = fread(addr_ptr, sizeof(p2AddrTr), 1, trace_file);
-
-//   if (readN) {
-    
-//     if (byte_order == BIG) {
-//       /* records stored in little endian format, convert */
-//       addr_ptr->addr = swap_endian(addr_ptr->addr);
-//       addr_ptr->time = swap_endian(addr_ptr->time);
-//     }
-//   }
-
-//   return readN;    
-// }
-
-
-// /* void AddressDecoder(p2AddrTr *addr_ptr, FILE *out)
-//  * Decode a Pentium II BYU address and print to the specified
-//  * file handle (opened by fopen in write mode)
-//  */
-// void AddressDecoder(p2AddrTr *addr_ptr, FILE *out) {
-  
-//   fprintf(out, "%08lx ", addr_ptr->addr);	/* address */
-//   /* what type of address request */
-//   switch (addr_ptr->reqtype) {
-//     case FETCH:
-//       fprintf(out, "FETCH\t\t");
-//       break;
-//     case MEMREAD:
-//       fprintf(out, "MEMREAD\t");
-//       break;
-//     case MEMREADINV:
-//       fprintf(out, "MEMREADINV\t");
-//       break;
-//     case MEMWRITE:
-//       fprintf(out, "MEMWRITE\t");
-//       break;
-//     case IOREAD:
-//       fprintf(out, "IOREAD\t\t");
-//       break;
-//     case IOWRITE:
-//       fprintf(out, "IOWRITE\t");
-//       break;
-//     case DEFERREPLY:
-//       fprintf(out, "DEFERREPLY\t");
-//       break;
-//     case INTA:
-//       fprintf(out, "INTA\t\t");
-//       break;
-//     case CNTRLAGNTRES:
-//       fprintf(out, "CNTRLAGNTRES\t");
-//       break;
-//     case BRTRACEREC:
-//       fprintf(out, "BRTRACEREC\t");
-//       break;
-//     case SHUTDOWN:
-//       fprintf(out, "SHUTDOWN\t");
-//       break;
-//     case FLUSH:
-//       fprintf(out, "FLUSH\t\t");
-//       break;
-//     case HALT:
-//       fprintf(out, "HALT\t\t");
-//       break;
-//     case SYNC:
-//       fprintf(out, "SYNC\t\t");
-//       break;
-//     case FLUSHACK:
-//       fprintf(out, "FLUSHACK\t");
-//       break;
-//     case STOPCLKACK:
-//       fprintf(out, "STOPCLKAK\t");
-//       break;
-//     case SMIACK:
-//       fprintf(out, "SMIACK\t\t");
-//       break;
-//   }
-//   /* print remaining attributes:
-//      bytes accessed
-//      other tattributes
-//      process
-//      timestamp
-//   */
-//   fprintf(out, "%2d\t%02x\t%1d\t%08lx\n", addr_ptr->size, addr_ptr->attr,
-// 	  addr_ptr->proc, addr_ptr->time);
-// }
-
 // int main(int argc, char **argv){
 //   parseArguments(argc, argv);
-
-//   PAGETABLE *p = new PAGETABLE(entryCountIndex, entryCountSizes);
-//   if(showLogToPhysTranslation){
-//     p->logTranslations();
-//   }
-
-//   FILE* ifp; 
-//   unsigned long i = 0;  /* instructions processed */
-//   p2AddrTr trace;	/* traced address */
-
-//   /* attempt to open trace file */
-//   if ((ifp = fopen(inputTraceFileName,"rb")) == NULL) {
-//     fprintf(stderr,"cannot open %s for reading\n",inputTraceFileName);
-//     exit(1);
-//   }
-	
-//   int processCount = 0;
-//   unsigned int FrameCount = 0;
-//   while (!feof(ifp)) {
-//     if(numMemoryRefs != -1 && processCount > numMemoryRefs){
-//       break;
-//     }
-//     /* get next address and process */
-//     if (NextAddress(ifp, &trace)) {
-
-//       MAP *map = p->PageLookup(trace.addr);
-//       if(!map){
-//         p->PageInsert(trace.addr, FrameCount);
-//         FrameCount++;
-//       }
-//       processCount++;
-
-//       i++;
-//       if ((i % 100000) == 0)
-// 	      fprintf(stderr,"%dK samples processed\r", i/100000);
-//     }
-//   }
-
-//   if(showLogToPhysTranslation){
-//     cout << "" << endl;
-//   }
-//   p->printTable();	
-
-
-
-//   /* clean up and return success */
-//   fclose(ifp);
-
 // }
 
-//typedef int semaphore; //special kind of int
 
-// struct mizzoFactory {
-//   sem_t mutex = 1;
-//   sem_t emptyCandies = 10;
-//   sem_t emptyFrogBites = 3;
-//   sem_t full = 0;
-// }
-
-typedef struct {
-  char *Name;       /* Human readable name of operation */
-  sem_t *MutexPtr;	/* pointer to critical region semaphore */
-  int *ValuePtr;	  /* pointer to shared data */
-} THREAD_DATA;
+void * producer(void * VoidPtr);
+void * consumer(void * VoidPtr);
 
 int main(int argc, char **argv) { 
+  cout << "Debug: 1" << endl;
   THREAD_DATA belt;
   pthread_t producerThread;
   pthread_t consumerThread;
+  cout << "Debug: 2" << endl;
   sem_t Mutex;
   int Value = 0;
+  void *ThreadResultPtr;
 
   belt.MutexPtr = &Mutex;
   belt.ValuePtr = &Value;
-
+  cout << "Debug: 3" << endl;
   //create sem
   if (sem_init(&Mutex, 0, 1) == -1) {
     fprintf(stderr, "Unable to initialize Mutex semaphore\n");
-    exit(EXT_SEMAPHORE);
+    exit(EXT_SEMAPHORE); //exit codes
   }
-
+  cout << "Debug: 4" << endl;
   //start threads here
   if (pthread_create(&producerThread, NULL, producer, &belt)) {
     fprintf(stderr, "Unable to create producer thread\n");
-    exit(EXT_THREAD);
+    exit(EXT_THREAD); //exit codes
   }
+  cout << "Debug: 5" << endl;
 
+  if (pthread_join(producerThread, &ThreadResultPtr)) {
+    fprintf(stderr, "Thread join error\n");
+    exit(EXT_THREAD); //exit codes
+  }
+  cout << "Debug: 6" << endl;
+
+  return 0;
 }

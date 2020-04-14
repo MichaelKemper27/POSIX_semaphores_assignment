@@ -1,22 +1,23 @@
 // consumer.C
 // Student: Kemper, Michael | Clode, Ryan
 // RedID: (Kemper)822 86 7065 | (Clode)820 72 7161
-#include <iostream>
+#include "includes.h"
+
 
 using namespace std;
 
-void consumer(void)
-{
-  int item;
-  while (TRUE) { /* repeat forever */
-    if (count == 0) {
-      sleep( ); /* if buffer is empty, got to sleep */
-    }
-    item = remove item( ); /* take item out of buffer */
-    count = count − 1; /* decrement count of items in buffer */
-    if (count == N − 1)  {
-      wakeup(producer); /* was buffer full? */
-    }
-  consume item(item); /* pr int item */
+void * consumer(void * VoidPtr) {
+  THREAD_DATA	*DataPtr = (THREAD_DATA *) VoidPtr;
+
+  while (true) { 
+    sem_wait(DataPtr->MutexPtr);	/* entry */
+
+    /* critical region */
+    *(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) + 1;
+    // printf("After %s --> %5d\n", DataPtr->Name, *(DataPtr->ValuePtr));
+    // fflush(stdout);
+        cout << "incremented valuePtr in consumer -> " << *(DataPtr->ValuePtr) << endl;
+
+    sem_post(DataPtr->MutexPtr);	/* exit */
   }
 }

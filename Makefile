@@ -6,7 +6,7 @@ CXX=g++
 # Make variable for compiler options
 #	-std=c++11  C/C++ variant to use, e.g. C++ 2011
 #	-g          include information for symbolic debugger e.g. gdb
-CXXFLAGS=-std=c++11 -g -lpthread -lrt
+CXXFLAGS=-std=c++11 -g -lpthread -lrt -pthread
 
 # Rules format:
 # target : dependency1 dependency2 ... dependencyN
@@ -18,11 +18,12 @@ CXXFLAGS=-std=c++11 -g -lpthread -lrt
 mizzo : producer.o consumer.o mizzo.o
 	$(CXX) $(CXXFLAGS) -o mizzo $^
 
-mizzo.o : mizzo.C
+mizzo.o : includes.h mizzo.C
 
-producer.o : producer.C
+producer.o : includes.h producer.C
 
-consumer.o : consumer.C
+consumer.o : includes.h consumer.C
+
 
 clean :
 	rm *.o
