@@ -89,13 +89,22 @@ int main(int argc, char **argv) {
   }
   cout << "Debug: 4" << endl;
   //start threads here
+  if (pthread_create(&consumerThread, NULL, consumer, &belt)) {
+    fprintf(stderr, "Unable to create consumer thread\n");
+    exit(EXT_THREAD); //exit codes
+  }
   if (pthread_create(&producerThread, NULL, producer, &belt)) {
     fprintf(stderr, "Unable to create producer thread\n");
     exit(EXT_THREAD); //exit codes
   }
+  
   cout << "Debug: 5" << endl;
 
   if (pthread_join(producerThread, &ThreadResultPtr)) {
+    fprintf(stderr, "Thread join error\n");
+    exit(EXT_THREAD); //exit codes
+  }
+  if (pthread_join(consumerThread, &ThreadResultPtr)) {
     fprintf(stderr, "Thread join error\n");
     exit(EXT_THREAD); //exit codes
   }
