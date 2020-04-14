@@ -7,6 +7,7 @@
 #include <pthread.h> 
 #include <semaphore.h> 
 #include <unistd.h> 
+#include "producer.C"
 
 using namespace std;
 
@@ -254,16 +255,39 @@ using namespace std;
 
 //typedef int semaphore; //special kind of int
 
-struct mizzoFactory {
-  sem_t mutex = 1;
-  sem_t emptyCandies = 10;
-  sem_t emptyFrogBites = 3;
-  sem_t full = 0;
-}
+// struct mizzoFactory {
+//   sem_t mutex = 1;
+//   sem_t emptyCandies = 10;
+//   sem_t emptyFrogBites = 3;
+//   sem_t full = 0;
+// }
+
+typedef struct {
+  char *Name;       /* Human readable name of operation */
+  sem_t *MutexPtr;	/* pointer to critical region semaphore */
+  int *ValuePtr;	  /* pointer to shared data */
+} THREAD_DATA;
 
 int main(int argc, char **argv) { 
-  mizzoFactory factory = new mizzoFactory;
+  THREAD_DATA belt;
+  pthread_t producerThread;
+  pthread_t consumerThread;
+  sem_t Mutex;
+  int Value = 0;
 
+  belt.MutexPtr = &Mutex;
+  belt.ValuePtr = &Value;
 
+  //create sem
+  if (sem_init(&Mutex, 0, 1) == -1) {
+    fprintf(stderr, "Unable to initialize Mutex semaphore\n");
+    exit(EXT_SEMAPHORE);
+  }
+
+  //start threads here
+  if (pthread_create(&producerThread, NULL, producer, &belt)) {
+    fprintf(stderr, "Unable to create producer thread\n");
+    exit(EXT_THREAD);
+  }
 
 }

@@ -5,18 +5,17 @@
 
 using namespace std;
 
-void producer(void)
-{
-  int item;
-  while (TRUE) { /* repeat forever */
-    item = produce item( ); /* generate next item */
-    if (count == N) {
-      sleep( ); /* if buffer is full, go to sleep */
-    }
-    insert item(item); /* put item in buffer */
-    count = count + 1; /* increment count of items in buffer */
-    if (count == 1) {
-      wakeup(consumer); /* was buffer empty? */
-    }
+void producer(void * VoidPtr) {
+  THREAD_DATA	*DataPtr = (THREAD_DATA *) VoidPtr;
+
+  while (TRUE) { 
+    sem_wait(DataPtr->MutexPtr);	/* entry */
+
+    /* critical region */
+    *(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) + 1;
+    // printf("After %s --> %5d\n", DataPtr->Name, *(DataPtr->ValuePtr));
+    // fflush(stdout);
+    
+    sem_post(DataPtr->MutexPtr);	/* exit */
   }
 }
