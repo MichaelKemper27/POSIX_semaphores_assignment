@@ -7,64 +7,46 @@
 
 using namespace std;
 
-// char* outputFileName;
-// char* inputTraceFileName;
-// int* entryCountSizes;
-// int entryCountIndex = 0;
-// bool showLogToPhysTranslation = false;
-// int numMemoryRefs = -1;
+struct WAIT_TIMES {
+  int ethelWait;
+  int lucyWait;
+  int frogBiteWait;
+  int suckerWait;
+}
 
-void parseArguments(int argc, char **argv) {
+WAIT_TIMES parseArguments(int argc, char **argv) {
   int option;
-  int flagCount = 0;
+  WAIT_TIMES waitTimes;
+  waitTimes.ethelWait = 0;
+  waitTimes.lucyWait = 0;
+  waitTimes.frogBiteWait = 0;
+  waitTimes.suckerWait = 0;
   entryCountSizes = new int[argc];
   while ( (option = getopt(argc, argv, "n:p:t")) != -1) {
     switch (option) {
       case 'E': /* Ethel candy boxing time */
-      numMemoryRefs = atoi(optarg);
-      flagCount++;
-      // optarg will contain the string following -n
+      waitTimes.ethelWait = atoi(optarg);
       // Process appropriately (e.g. convert to integer atoi(optarg))
       break;
       case 'L': /* Lucy candy boxing time */
-      // optarg contains name of page file…
-      outputFileName = optarg;
-      flagCount++;
+      waitTimes.lucyWait = atoi(optarg);
+      // Process appropriately (e.g. convert to integer atoi(optarg))
       break;
       case 'f': /* Frog bite time */
-      // No argument this time, just set a flag
-      showLogToPhysTranslation = true;
+      waitTimes.frogBiteWait = atoi(optarg);
+      // Process appropriately (e.g. convert to integer atoi(optarg))
       break;
       case 'e': /* everlasting escargot sucker time */
-      // No argument this time, just set a flag
-      showLogToPhysTranslation = true;
+      waitTimes.suckerWait = atoi(optarg);
+      // Process appropriately (e.g. convert to integer atoi(optarg))
       break;
       default:
       // print something about the usage and die…
       break;
     }
- //idx = optind;
   }
-  
-  int flagTotalCounter = flagCount*2 + (int)showLogToPhysTranslation;
-
-  if(argc > 1) {
-    for(int i = flagTotalCounter+1; i < argc; i++) {
-      if (isdigit(argv[i][0])) {
-        int argAsInt = atoi(argv[i]);
-        entryCountSizes[entryCountIndex] = argAsInt;
-        entryCountIndex++;
-      } else if(sizeof(argv[i]) > 2 && isalpha(argv[i][0])) {
-        inputTraceFileName = argv[i];
-      }
-    }
-  }
+  return waitTimes;
 }
-
-// int main(int argc, char **argv){
-//   parseArguments(argc, argv);
-// }
-
 
 void * producer(void * VoidPtr);
 void * consumer(void * VoidPtr);
@@ -77,6 +59,7 @@ int main(int argc, char **argv) {
   void *ThreadResultPtr;
   queue <Candy> q;
 
+  WAIT_TIMES waitTimes = parseArguments(argc, argv);
 
   THREAD_DATA belt;
   belt.MutexPtr = &Mutex;

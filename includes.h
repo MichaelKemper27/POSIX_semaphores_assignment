@@ -29,7 +29,7 @@ struct THREAD_DATA {
   queue<Candy> *QueuePtr;
   int *candyCount;
   int *frogBiteCount;
-
+  int *waitTime;
 };
 
 #endif
