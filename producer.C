@@ -14,8 +14,8 @@ void * producer(void * VoidPtr) {
 
     /* critical region */
     if(DataPtr->QueuePtr->size() < 10){
-      DataPtr->QueuePtr->push(SUCKER);
-      cout << "Belt: " << "Added " << Candies[0] << endl;
+      DataPtr->QueuePtr->push(*(DataPtr->producerType));
+      cout << "Belt: " << "Added " << Candies[*(DataPtr->producerType)] << endl;
     }
     //*(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) + 1;
     // printf("After %s --> %5d\n", DataPtr->Name, *(DataPtr->ValuePtr));

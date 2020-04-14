@@ -25,11 +25,11 @@ static const char * Candies[] = { "escargo sucker", "frog bite" };
 struct THREAD_DATA {
   char *Name;       
   sem_t *MutexPtr;	/* pointer to critical region semaphore */
-  int *ValuePtr;	  /* pointer to shared data */
   queue<Candy> *QueuePtr;
   int *candyCount;
   int *frogBiteCount;
   int *waitTime;
+  Candy *producerType;
 };
 
 #endif
