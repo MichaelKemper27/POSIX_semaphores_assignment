@@ -6,7 +6,7 @@ CXX=g++
 # Make variable for compiler options
 #	-std=c++11  C/C++ variant to use, e.g. C++ 2011
 #	-g          include information for symbolic debugger e.g. gdb
-CXXFLAGS=-std=c++11 -g
+CXXFLAGS=-std=c++11 -g -lpthread -lrt
 
 # Rules format:
 # target : dependency1 dependency2 ... dependencyN
@@ -15,14 +15,14 @@ CXXFLAGS=-std=c++11 -g
 # First target is the one executed if you just type make
 # make target specifies a specific target
 # $^ is an example of a special variable.  It substitutes all dependencies
-pagetable : pagetable.o level.o main.o
-	$(CXX) $(CXXFLAGS) -o pagetable $^
+mizzo : producer.o consumer.o mizzo.o
+	$(CXX) $(CXXFLAGS) -o mizzo $^
 
-pagetable.o : map.h level.h pagetable.h pagetable.C
+mizzo.o : mizzo.C
 
-level.o : map.h level.h pagetable.h level.C
+producer.o : producer.C
 
-main.o : map.h level.h pagetable.h main.C
+consumer.o : consumer.C
 
 clean :
 	rm *.o
