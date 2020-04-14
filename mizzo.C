@@ -14,48 +14,52 @@ using namespace std;
 // bool showLogToPhysTranslation = false;
 // int numMemoryRefs = -1;
 
-// void parseArguments(int argc, char **argv) {
-//   int option;
-//   int flagCount = 0;
-//   entryCountSizes = new int[argc];
-//   while ( (option = getopt(argc, argv, "n:p:t")) != -1) {
-//     switch (option) {
-//       case 'n': /* Number of addresses to process */
-//       numMemoryRefs = atoi(optarg);
-//       flagCount++;
-//       // optarg will contain the string following -n
-//       // Process appropriately (e.g. convert to integer atoi(optarg))
-//       break;
-//       case 'p': /* produce map of pages */
-//       // optarg contains name of page file…
-//       outputFileName = optarg;
-//       flagCount++;
-//       break;
-//       case 't': /* Show address translation */
-//       // No argument this time, just set a flag
-//       showLogToPhysTranslation = true;
-//       break;
-//       default:
-//       // print something about the usage and die…
-//       break;
-//     }
-//  //idx = optind;
-//   }
+void parseArguments(int argc, char **argv) {
+  int option;
+  int flagCount = 0;
+  entryCountSizes = new int[argc];
+  while ( (option = getopt(argc, argv, "n:p:t")) != -1) {
+    switch (option) {
+      case 'E': /* Ethel candy boxing time */
+      numMemoryRefs = atoi(optarg);
+      flagCount++;
+      // optarg will contain the string following -n
+      // Process appropriately (e.g. convert to integer atoi(optarg))
+      break;
+      case 'L': /* Lucy candy boxing time */
+      // optarg contains name of page file…
+      outputFileName = optarg;
+      flagCount++;
+      break;
+      case 'f': /* Frog bite time */
+      // No argument this time, just set a flag
+      showLogToPhysTranslation = true;
+      break;
+      case 'e': /* everlasting escargot sucker time */
+      // No argument this time, just set a flag
+      showLogToPhysTranslation = true;
+      break;
+      default:
+      // print something about the usage and die…
+      break;
+    }
+ //idx = optind;
+  }
   
-//   int flagTotalCounter = flagCount*2 + (int)showLogToPhysTranslation;
+  int flagTotalCounter = flagCount*2 + (int)showLogToPhysTranslation;
 
-//   if(argc > 1) {
-//     for(int i = flagTotalCounter+1; i < argc; i++) {
-//       if (isdigit(argv[i][0])) {
-//         int argAsInt = atoi(argv[i]);
-//         entryCountSizes[entryCountIndex] = argAsInt;
-//         entryCountIndex++;
-//       } else if(sizeof(argv[i]) > 2 && isalpha(argv[i][0])) {
-//         inputTraceFileName = argv[i];
-//       }
-//     }
-//   }
-// }
+  if(argc > 1) {
+    for(int i = flagTotalCounter+1; i < argc; i++) {
+      if (isdigit(argv[i][0])) {
+        int argAsInt = atoi(argv[i]);
+        entryCountSizes[entryCountIndex] = argAsInt;
+        entryCountIndex++;
+      } else if(sizeof(argv[i]) > 2 && isalpha(argv[i][0])) {
+        inputTraceFileName = argv[i];
+      }
+    }
+  }
+}
 
 // int main(int argc, char **argv){
 //   parseArguments(argc, argv);
