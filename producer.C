@@ -37,14 +37,14 @@ void * producer(void * VoidPtr) {
         int numOfSuckers = numTotal - numOfFrogs;
         int numProduced = *(DataPtr->candyCountProduced);
 
-        cout << "Belt: " << numOfFrogs << " frogs + " << numOfSuckers << " escargos = " << numTotal;
-        cout << ". produced: " << numProduced << "\t" << "Added " << Candies[*(DataPtr->producerType)] << "." << endl;
+        cout << "Belt: " << numOfFrogs << " frogs + " << numOfSuckers;
+        cout << " escargos = " << numTotal;
+        cout << ". produced: " << numProduced << "\t" << "Added ";
+        cout << Candies[*(DataPtr->producerType)] << "." << endl;
         fflush(stdout);
       }
     }
-    //*(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) + 1;
-    // printf("After %s --> %5d\n", DataPtr->Name, *(DataPtr->ValuePtr));
-    // fflush(stdout);
+
     sem_post(DataPtr->MutexPtr);	/* exit */
     this_thread::sleep_for(chrono::milliseconds(*(DataPtr->waitTime)));
   }

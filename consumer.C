@@ -39,8 +39,10 @@ void * consumer(void * VoidPtr) {
       int numOfSuckers = numTotal - numOfFrogs;
       int numProduced = *(DataPtr->candyCountProduced);
 
-      cout << "Belt: " << numOfFrogs << " frogs + " << numOfSuckers << " escargos = " << numTotal;
-      cout << ". produced: " << numProduced << "\t" << DataPtr->Name <<  " consumed " << Candies[c] << "." << endl;
+      cout << "Belt: " << numOfFrogs << " frogs + " << numOfSuckers;
+      cout << " escargos = " << numTotal;
+      cout << ". produced: " << numProduced << "\t" << DataPtr->Name;
+      cout <<  " consumed " << Candies[c] << "." << endl;
       fflush(stdout);
     }
 
