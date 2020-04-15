@@ -30,8 +30,13 @@ void * consumer(void * VoidPtr) {
       //increment candy count consumed
       *(DataPtr->candyCountConsumed) = *(DataPtr->candyCountConsumed) + 1;
 
-      cout << "Belt: " << DataPtr->Name <<  " consumed " << Candies[c] << endl;
-      cout << "num consumed: " << *(DataPtr->candyCountConsumed) << endl;
+      int numTotal = DataPtr->QueuePtr->size();
+      int numOfFrogs = *(DataPtr->frogBiteCount);
+      int numOfSuckers = numTotal - numOfFrogs;
+      int numProduced = *(DataPtr->candyCountProduced);
+
+      cout << "Belt: " << numOfFrogs << " frogs + " << numOfSuckers << " escargos = " << numTotal;
+      cout << ". produced: " << numProduced << "\t" << DataPtr->Name <<  " consumed " << Candies[c] << "." << endl;
       fflush(stdout);
     }
     //*(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) - 1;

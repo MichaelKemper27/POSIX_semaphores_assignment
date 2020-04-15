@@ -32,9 +32,13 @@ void * producer(void * VoidPtr) {
         //increment candy count produced
         *(DataPtr->candyCountProduced) = *(DataPtr->candyCountProduced) + 1;
 
-        cout << "Belt: " << "Added " << Candies[*(DataPtr->producerType)] << endl;
-        cout << "num produced: " << *(DataPtr->candyCountProduced) << endl;
-        cout << "num consumed: " << *(DataPtr->candyCountConsumed) << endl;
+        int numTotal = DataPtr->QueuePtr->size();
+        int numOfFrogs = *(DataPtr->frogBiteCount);
+        int numOfSuckers = numTotal - numOfFrogs;
+        int numProduced = *(DataPtr->candyCountProduced);
+
+        cout << "Belt: " << numOfFrogs << " frogs + " << numOfSuckers << " escargos = " << numTotal;
+        cout << ". produced: " << numProduced << "\t" << "Added " << Candies[*(DataPtr->producerType)] << endl;
         fflush(stdout);
       }
     }
