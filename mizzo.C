@@ -162,13 +162,21 @@ int main(int argc, char **argv) {
   cout << "\nPRODUCTION REPORT" << endl;
   cout << "----------------------------------------" << endl;
 
-  int totalFrogBites = lucy.totalFrogBitesConsumed + ethel.totalFrogBitesConsumed;
+  int totalFrog = lucy.totalFrogBitesConsumed + ethel.totalFrogBitesConsumed;
   int totalSuckers = lucy.totalSuckersConsumed + ethel.totalSuckersConsumed;
 
-  cout << "crunchy frog bite producer generated " << totalFrogBites << " candies" << endl;
-  cout << "escargot sucker producer generated " << totalSuckers << " candies" << endl;
-  cout << "Lucy consumed " << lucy.totalFrogBitesConsumed << " crunchy frog bites + " << lucy.totalSuckersConsumed << " escargot suckers = " << lucy.totalSuckersConsumed + lucy.totalFrogBitesConsumed << endl;
-  cout << "Ethel consumed " << ethel.totalFrogBitesConsumed << " crunchy frog bites + " << ethel.totalSuckersConsumed << " escargot suckers = " << ethel.totalSuckersConsumed + ethel.totalFrogBitesConsumed << endl;
+  cout << "crunchy frog bite producer generated " << totalFrog;
+  cout << " candies" << endl;
+  cout << "escargot sucker producer generated " << totalSuckers <<
+  cout << " candies" << endl;
+  cout << "Lucy consumed " << lucy.totalFrogBitesConsumed << endl;
+  cout << " crunchy frog bites + " << lucy.totalSuckersConsumed;
+  cout << " escargot suckers = ";
+  cout << lucy.totalSuckersConsumed + lucy.totalFrogBitesConsumed << endl;
+  cout << "Ethel consumed " << ethel.totalFrogBitesConsumed;
+  cout << " crunchy frog bites + " << ethel.totalSuckersConsumed;
+  cout << " escargot suckers = ";
+  cout << ethel.totalSuckersConsumed + ethel.totalFrogBitesConsumed << endl;
 
 
   return 0;
