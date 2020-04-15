@@ -26,9 +26,9 @@ void * consumer(void * VoidPtr) {
         //if frogbite, decrement frog bite counter
       if(c == 1){ 
         *(DataPtr->frogBiteCount) = *(DataPtr->frogBiteCount) - 1;
-        *(DataPtr->totalFrogBites) = *(DataPtr->totalFrogBites) + 1;
+        DataPtr->totalFrogBitesConsumed = DataPtr->totalFrogBitesConsumed + 1;
       } else {
-        *(DataPtr->totalSuckers) = *(DataPtr->totalSuckers) + 1;
+        DataPtr->totalSuckersConsumed = DataPtr->totalSuckersConsumed + 1;
       }
 
       //increment candy count consumed

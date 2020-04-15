@@ -60,12 +60,12 @@ int main(int argc, char **argv) {
   int frogBiteCount = 0;
   int candyCountProduced = 0;
   int candyCountConsumed = 0;
-  int totalFrogBites = 0;
-  int totalSuckers = 0;
+  // int totalFrogBitesConsumed = 0;
+  // int totalSuckersConsumed = 0;
 
   WAIT_TIMES waitTimes = parseArguments(argc, argv);
 
-  THREAD_DATA sucker = {NULL, &Mutex, &q, &candyCountProduced, &candyCountConsumed,&frogBiteCount, &(waitTimes.suckerWait), &s, &totalFrogBites, &totalSuckers};
+  THREAD_DATA sucker = {NULL, &Mutex, &q, &candyCountProduced, &candyCountConsumed,&frogBiteCount, &(waitTimes.suckerWait), &s, 0, 0};
   // sucker.MutexPtr = &Mutex;
   // sucker.QueuePtr = &q;
   // sucker.producerType = &s;
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
   // sucker.candyCountProduced = &candyCountProduced;
   // sucker.candyCountConsumed = &candyCountConsumed;
 
-  THREAD_DATA frog = {NULL, &Mutex, &q, &candyCountProduced, &candyCountConsumed, &frogBiteCount, &(waitTimes.frogBiteWait), &f, &totalFrogBites, &totalSuckers};
+  THREAD_DATA frog = {NULL, &Mutex, &q, &candyCountProduced, &candyCountConsumed, &frogBiteCount, &(waitTimes.frogBiteWait), &f, 0, 0};
   // frog.MutexPtr = &Mutex;
   // frog.QueuePtr = &q;
   // frog.producerType = &f;
@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
   // frog.candyCountProduced = &candyCountProduced;
   // frog.candyCountConsumed = &candyCountConsumed;
 
-  THREAD_DATA lucy = {strdup("Lucy"), &Mutex, &q, &candyCountProduced, &candyCountConsumed, &frogBiteCount, &(waitTimes.lucyWait), NULL, &totalFrogBites, &totalSuckers};
+  THREAD_DATA lucy = {strdup("Lucy"), &Mutex, &q, &candyCountProduced, &candyCountConsumed, &frogBiteCount, &(waitTimes.lucyWait), NULL, 0, 0};
   // lucy.MutexPtr = &Mutex;
   // lucy.QueuePtr = &q;
   // lucy.Name = strdup("Lucy");
@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
   // lucy.candyCountProduced = &candyCountProduced;
   // lucy.candyCountConsumed = &candyCountConsumed;
 
-  THREAD_DATA ethel = {strdup("Ethel"), &Mutex, &q, &candyCountProduced, &candyCountConsumed, &frogBiteCount, &(waitTimes.ethelWait), NULL, &totalFrogBites, &totalSuckers};
+  THREAD_DATA ethel = {strdup("Ethel"), &Mutex, &q, &candyCountProduced, &candyCountConsumed, &frogBiteCount, &(waitTimes.ethelWait), NULL, 0, 0};
 
   // ethel.MutexPtr = &Mutex;
   // ethel.QueuePtr = &q;
@@ -146,10 +146,13 @@ int main(int argc, char **argv) {
     exit(EXT_THREAD); //exit codes
   }
 
-  cout << "crunchy frog bite producer generated " << *(frog.totalFrogBites) << " candies" << endl;
-  cout << "escargot sucker producer generated " << *(sucker.totalSuckers) << " candies" << endl;
-  cout << "Lucy consumed " << *(lucy.totalFrogBites) << " crunchy frog bites + " << *(lucy.totalSuckers) << " escargot suckers = " << *(lucy.totalSuckers) + *(lucy.totalFrogBites) << endl;
-  cout << "Ethel consumed " << *(ethel.totalFrogBites) << " crunchy frog bites + " << *(ethel.totalSuckers) << " escargot suckers = " << *(ethel.totalSuckers) + *(ethel.totalFrogBites) << endl;
+  int totalFrogBites = lucy.totalFrogBitesConsumed + ethel.totalFrogBitesConsumed;
+  int totalSuckers = lucy.totalSuckersConsumed + ethel.totalSuckersConsumed;
+
+  cout << "crunchy frog bite producer generated " << totalFrogBites << " candies" << endl;
+  cout << "escargot sucker producer generated " << totalSuckers << " candies" << endl;
+  cout << "Lucy consumed " << lucy.totalFrogBitesConsumed << " crunchy frog bites + " << lucy.totalSuckersConsumed << " escargot suckers = " << lucy.totalSuckersConsumed + lucy.totalFrogBitesConsumed << endl;
+  cout << "Ethel consumed " << ethel.totalFrogBitesConsumed << " crunchy frog bites + " << ethel.totalSuckersConsumed << " escargot suckers = " << ethel.totalSuckersConsumed + ethel.totalFrogBitesConsumed << endl;
 
 //   crunchy frog bite producer generated 46 candies
 // escargot sucker producer generated 54 candies

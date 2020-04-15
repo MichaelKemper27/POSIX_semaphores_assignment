@@ -33,8 +33,8 @@ struct THREAD_DATA {
   int *frogBiteCount;
   int *waitTime;
   Candy *producerType;
-  int *totalFrogBites;
-  int *totalSuckers;
+  int totalFrogBitesConsumed;
+  int totalSuckersConsumed;
 };
 
 #endif
