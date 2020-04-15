@@ -12,11 +12,26 @@ void * consumer(void * VoidPtr) {
     sem_wait(DataPtr->MutexPtr);	/* entry */
 
     /* critical region */
+
+    if(*(DataPtr->candyCountConsumed) >= 100){
+      sem_post(DataPtr->MutexPtr);
+      return NULL;
+    }
+
     if(DataPtr->QueuePtr->size() > 0){
       //this_thread::sleep_for(chrono::milliseconds(*(DataPtr->waitTime)));
       Candy c = DataPtr->QueuePtr->front();
       DataPtr->QueuePtr->pop();
+
+      if(c == 1){
+        *(DataPtr->frogBiteCount) = *(DataPtr->frogBiteCount) - 1;
+      }
+
+      //increment candy count consumed
+      *(DataPtr->candyCountConsumed) = *(DataPtr->candyCountConsumed) + 1;
+
       cout << "Belt: " << DataPtr->Name <<  " consumed " << Candies[c] << endl;
+      cout << "num consumed: " << *(DataPtr->candyCountConsumed) << endl;
       fflush(stdout);
     }
     //*(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) - 1;

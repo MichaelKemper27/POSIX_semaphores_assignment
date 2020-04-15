@@ -28,7 +28,8 @@ struct THREAD_DATA {
   char *Name;       
   sem_t *MutexPtr;	/* pointer to critical region semaphore */
   queue<Candy> *QueuePtr;
-  int *candyCount;
+  int *candyCountProduced;
+  int *candyCountConsumed;
   int *frogBiteCount;
   int *waitTime;
   Candy *producerType;

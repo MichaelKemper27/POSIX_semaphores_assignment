@@ -57,6 +57,9 @@ int main(int argc, char **argv) {
   queue <Candy> q;
   Candy s = SUCKER;
   Candy f = FROGBITE;
+  int frogBiteCount = 0;
+  int candyCountProduced = 0;
+  int candyCountConsumed = 0;
 
   WAIT_TIMES waitTimes = parseArguments(argc, argv);
 
@@ -66,24 +69,36 @@ int main(int argc, char **argv) {
   sucker.producerType = &s;
   cout << "sucker wait time :" << waitTimes.suckerWait << endl;
   sucker.waitTime = &(waitTimes.suckerWait);
+  sucker.frogBiteCount = &frogBiteCount;
+  sucker.candyCountProduced = &candyCountProduced;
+  sucker.candyCountConsumed = &candyCountConsumed;
 
   THREAD_DATA frog;
   frog.MutexPtr = &Mutex;
   frog.QueuePtr = &q;
   frog.producerType = &f;
   frog.waitTime = &(waitTimes.frogBiteWait);
+  frog.frogBiteCount = &frogBiteCount;
+  frog.candyCountProduced = &candyCountProduced;
+  frog.candyCountConsumed = &candyCountConsumed;
 
   THREAD_DATA lucy;
   lucy.MutexPtr = &Mutex;
   lucy.QueuePtr = &q;
   lucy.Name = strdup("Lucy");
   lucy.waitTime = &(waitTimes.lucyWait);
+  lucy.frogBiteCount = &frogBiteCount;
+  lucy.candyCountProduced = &candyCountProduced;
+  lucy.candyCountConsumed = &candyCountConsumed;
 
   THREAD_DATA ethel;
   ethel.MutexPtr = &Mutex;
   ethel.QueuePtr = &q;
   ethel.Name = strdup("Ethel");
   ethel.waitTime = &(waitTimes.ethelWait);
+  ethel.frogBiteCount = &frogBiteCount;
+  ethel.candyCountProduced = &candyCountProduced;
+  ethel.candyCountConsumed = &candyCountConsumed;
 
   //create sem
   if (sem_init(&Mutex, 0, 1) == -1) {

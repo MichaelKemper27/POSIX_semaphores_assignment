@@ -12,11 +12,31 @@ void * producer(void * VoidPtr) {
     sem_wait(DataPtr->MutexPtr);	/* entry */
 
     /* critical region */
+    if(*(DataPtr->candyCountProduced) >= 100){
+      sem_post(DataPtr->MutexPtr);
+      return NULL;
+    }
+
+    //Check if queue is full
     if(DataPtr->QueuePtr->size() < 10){
-      
-      DataPtr->QueuePtr->push(*(DataPtr->producerType));
-      cout << "Belt: " << "Added " << Candies[*(DataPtr->producerType)] << endl;
-      fflush(stdout);
+
+      //check if frogbite, belt must have < 3
+      if(*(DataPtr->producerType) != FROGBITE || *(DataPtr->frogBiteCount) < 3){
+        DataPtr->QueuePtr->push(*(DataPtr->producerType));
+
+        //if frogbite, increment frog bite counter
+        if(*(DataPtr->producerType) == FROGBITE){
+          *(DataPtr->frogBiteCount) = *(DataPtr->frogBiteCount) + 1;
+        }
+
+        //increment candy count produced
+        *(DataPtr->candyCountProduced) = *(DataPtr->candyCountProduced) + 1;
+
+        cout << "Belt: " << "Added " << Candies[*(DataPtr->producerType)] << endl;
+        cout << "num produced: " << *(DataPtr->candyCountProduced) << endl;
+        cout << "num consumed: " << *(DataPtr->candyCountConsumed) << endl;
+        fflush(stdout);
+      }
     }
     //*(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) + 1;
     // printf("After %s --> %5d\n", DataPtr->Name, *(DataPtr->ValuePtr));
