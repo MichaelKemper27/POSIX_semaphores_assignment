@@ -27,6 +27,9 @@ void * producer(void * VoidPtr) {
         //if frogbite, increment frog bite counter
         if(*(DataPtr->producerType) == FROGBITE){
           *(DataPtr->frogBiteCount) = *(DataPtr->frogBiteCount) + 1;
+          *(DataPtr->totalFrogBites) = *(DataPtr->totalFrogBites) + 1;
+        } else {
+          *(DataPtr->totalSuckers) = *(DataPtr->totalSuckers) + 1;
         }
 
         //increment candy count produced
