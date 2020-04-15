@@ -23,7 +23,7 @@ void * consumer(void * VoidPtr) {
       Candy c = DataPtr->QueuePtr->front();
       DataPtr->QueuePtr->pop();
 
-        //if frogbite, decrement frog bite counter
+      //if frogbite, decrement frog bite counter
       if(c == 1){ 
         *(DataPtr->frogBiteCount) = *(DataPtr->frogBiteCount) - 1;
         DataPtr->totalFrogBitesConsumed = DataPtr->totalFrogBitesConsumed + 1;
@@ -43,9 +43,6 @@ void * consumer(void * VoidPtr) {
       cout << ". produced: " << numProduced << "\t" << DataPtr->Name <<  " consumed " << Candies[c] << "." << endl;
       fflush(stdout);
     }
-    //*(DataPtr->ValuePtr) = *(DataPtr->ValuePtr) - 1;
-    // printf("After %s --> %5d\n", DataPtr->Name, *(DataPtr->ValuePtr));
-    // fflush(stdout);
 
     sem_post(DataPtr->MutexPtr);	/* exit */
     this_thread::sleep_for(chrono::milliseconds(*(DataPtr->waitTime)));

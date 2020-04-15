@@ -60,50 +60,62 @@ int main(int argc, char **argv) {
   int frogBiteCount = 0;
   int candyCountProduced = 0;
   int candyCountConsumed = 0;
-  // int totalFrogBitesConsumed = 0;
-  // int totalSuckersConsumed = 0;
+
 
   WAIT_TIMES waitTimes = parseArguments(argc, argv);
 
-  THREAD_DATA sucker = {NULL, &Mutex, &q, &candyCountProduced, &candyCountConsumed,&frogBiteCount, &(waitTimes.suckerWait), &s, 0, 0};
-  // sucker.MutexPtr = &Mutex;
-  // sucker.QueuePtr = &q;
-  // sucker.producerType = &s;
-  cout << "sucker wait time :" << waitTimes.suckerWait << endl;
-  // sucker.waitTime = &(waitTimes.suckerWait);
-  // sucker.frogBiteCount = &frogBiteCount;
-  // sucker.candyCountProduced = &candyCountProduced;
-  // sucker.candyCountConsumed = &candyCountConsumed;
+  THREAD_DATA sucker = {
+    NULL, 
+    &Mutex, 
+    &q, 
+    &candyCountProduced, 
+    &candyCountConsumed,
+    &frogBiteCount, 
+    &(waitTimes.suckerWait), 
+    &s, 
+    0, 
+    0
+  };
+  
+  THREAD_DATA frog = {
+    NULL, 
+    &Mutex, 
+    &q, 
+    &candyCountProduced, 
+    &candyCountConsumed, 
+    &frogBiteCount, 
+    &(waitTimes.frogBiteWait), 
+    &f, 
+    0, 
+    0
+  };
 
-  THREAD_DATA frog = {NULL, &Mutex, &q, &candyCountProduced, &candyCountConsumed, &frogBiteCount, &(waitTimes.frogBiteWait), &f, 0, 0};
-  // frog.MutexPtr = &Mutex;
-  // frog.QueuePtr = &q;
-  // frog.producerType = &f;
-  // frog.waitTime = &(waitTimes.frogBiteWait);
-  // frog.frogBiteCount = &frogBiteCount;
-  // frog.candyCountProduced = &candyCountProduced;
-  // frog.candyCountConsumed = &candyCountConsumed;
+  THREAD_DATA lucy = {
+    strdup("Lucy"), 
+    &Mutex, 
+    &q, 
+    &candyCountProduced, 
+    &candyCountConsumed, 
+    &frogBiteCount, 
+    &(waitTimes.lucyWait), 
+    NULL, 
+    0, 
+    0
+  };
 
-  THREAD_DATA lucy = {strdup("Lucy"), &Mutex, &q, &candyCountProduced, &candyCountConsumed, &frogBiteCount, &(waitTimes.lucyWait), NULL, 0, 0};
-  // lucy.MutexPtr = &Mutex;
-  // lucy.QueuePtr = &q;
-  // lucy.Name = strdup("Lucy");
-  // lucy.waitTime = &(waitTimes.lucyWait);
-  // lucy.frogBiteCount = &frogBiteCount;
-  // lucy.candyCountProduced = &candyCountProduced;
-  // lucy.candyCountConsumed = &candyCountConsumed;
+  THREAD_DATA ethel = {
+    strdup("Ethel"), 
+    &Mutex, 
+    &q, 
+    &candyCountProduced, 
+    &candyCountConsumed, 
+    &frogBiteCount, 
+    &(waitTimes.ethelWait), 
+    NULL, 
+    0, 
+    0
+  };
 
-  THREAD_DATA ethel = {strdup("Ethel"), &Mutex, &q, &candyCountProduced, &candyCountConsumed, &frogBiteCount, &(waitTimes.ethelWait), NULL, 0, 0};
-
-  // ethel.MutexPtr = &Mutex;
-  // ethel.QueuePtr = &q;
-  // ethel.Name = strdup("Ethel");
-  // ethel.waitTime = &(waitTimes.ethelWait);
-  // ethel.frogBiteCount = &frogBiteCount;
-  // ethel.candyCountProduced = &candyCountProduced;
-  // ethel.candyCountConsumed = &candyCountConsumed;
-
-  cout << "done init" << endl;
 
   //create sem
   if (sem_init(&Mutex, 0, 1) == -1) {
@@ -146,6 +158,10 @@ int main(int argc, char **argv) {
     exit(EXT_THREAD); //exit codes
   }
 
+
+  cout << "\nPRODUCTION REPORT" << endl;
+  cout << "----------------------------------------" << endl;
+
   int totalFrogBites = lucy.totalFrogBitesConsumed + ethel.totalFrogBitesConsumed;
   int totalSuckers = lucy.totalSuckersConsumed + ethel.totalSuckersConsumed;
 
@@ -153,11 +169,6 @@ int main(int argc, char **argv) {
   cout << "escargot sucker producer generated " << totalSuckers << " candies" << endl;
   cout << "Lucy consumed " << lucy.totalFrogBitesConsumed << " crunchy frog bites + " << lucy.totalSuckersConsumed << " escargot suckers = " << lucy.totalSuckersConsumed + lucy.totalFrogBitesConsumed << endl;
   cout << "Ethel consumed " << ethel.totalFrogBitesConsumed << " crunchy frog bites + " << ethel.totalSuckersConsumed << " escargot suckers = " << ethel.totalSuckersConsumed + ethel.totalFrogBitesConsumed << endl;
-
-//   crunchy frog bite producer generated 46 candies
-// escargot sucker producer generated 54 candies
-// Lucy consumed 24 crunchy frog bites + 30 escargot suckers = 54
-// Ethel consumed 22 crunchy frog bites + 24 escargot suckers = 46
 
 
   return 0;
