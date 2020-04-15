@@ -12,6 +12,8 @@ void * producer(void * VoidPtr) {
     sem_wait(DataPtr->MutexPtr);	/* entry */
 
     /* critical region */
+
+    //if 100 candies produced then stop thread
     if(*(DataPtr->candyCountProduced) >= 100){
       sem_post(DataPtr->MutexPtr);
       return NULL;

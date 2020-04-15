@@ -141,6 +141,7 @@ int main(int argc, char **argv) {
     exit(EXT_THREAD); //exit codes
   }
 
+  //join threads
   if (pthread_join(producerThreadS, &ThreadResultPtr)) {
     fprintf(stderr, "Thread join error\n");
     exit(EXT_THREAD); //exit codes

@@ -13,17 +13,21 @@ void * consumer(void * VoidPtr) {
 
     /* critical region */
 
+    //if 100 candies are consumed stop thread
     if(*(DataPtr->candyCountConsumed) >= 100){
       sem_post(DataPtr->MutexPtr);
       return NULL;
     }
 
+    //check if queue is not empty
     if(DataPtr->QueuePtr->size() > 0){
-      //this_thread::sleep_for(chrono::milliseconds(*(DataPtr->waitTime)));
+
+      //grab candy from queue
       Candy c = DataPtr->QueuePtr->front();
       DataPtr->QueuePtr->pop();
 
       //if frogbite, decrement frog bite counter
+      //add to total counts of frog bites and suckers
       if(c == 1){ 
         *(DataPtr->frogBiteCount) = *(DataPtr->frogBiteCount) - 1;
         DataPtr->totalFrogBitesConsumed = DataPtr->totalFrogBitesConsumed + 1;
