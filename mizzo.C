@@ -168,9 +168,9 @@ int main(int argc, char **argv) {
 
   cout << "crunchy frog bite producer generated " << totalFrog;
   cout << " candies" << endl;
-  cout << "escargot sucker producer generated " << totalSuckers <<
+  cout << "escargot sucker producer generated " << totalSuckers;
   cout << " candies" << endl;
-  cout << "Lucy consumed " << lucy.totalFrogBitesConsumed << endl;
+  cout << "Lucy consumed " << lucy.totalFrogBitesConsumed;
   cout << " crunchy frog bites + " << lucy.totalSuckersConsumed;
   cout << " escargot suckers = ";
   cout << lucy.totalSuckersConsumed + lucy.totalFrogBitesConsumed << endl;
